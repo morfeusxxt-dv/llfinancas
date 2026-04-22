@@ -57,7 +57,7 @@ export function DashboardCharts({ transactions, categories }: DashboardChartsPro
         </CardHeader>
         <CardContent className="h-[300px] pt-0">
           {expenseData.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={200}>
               <PieChart>
                 <Pie
                   data={expenseData}
@@ -98,7 +98,7 @@ export function DashboardCharts({ transactions, categories }: DashboardChartsPro
           <CardDescription className="text-xs text-slate-500">Comparativo financeiro mensal</CardDescription>
         </CardHeader>
         <CardContent className="h-[250px] pt-0">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" minWidth={200} minHeight={200}>
             <BarChart data={comparisonData}>
               <XAxis 
                 dataKey="name" 
