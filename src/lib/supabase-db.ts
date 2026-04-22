@@ -4,6 +4,7 @@ import { Category, Transaction, Budget, AppSettings, TransactionType } from './s
 export const dbService = {
   // Transactions
   async getTransactions(userId: string, monthYear?: string) {
+    if (!supabase) return [];
     let query = supabase
       .from('transactions')
       .select(`
@@ -30,6 +31,7 @@ export const dbService = {
   },
 
   async getTransaction(id: number, userId: string) {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('transactions')
       .select(`
@@ -51,6 +53,7 @@ export const dbService = {
   },
 
   async createTransaction(transaction: Omit<Transaction, 'id' | 'created_at'>) {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('transactions')
       .insert(transaction)
@@ -62,6 +65,7 @@ export const dbService = {
   },
 
   async updateTransaction(id: number, transaction: Partial<Transaction>) {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('transactions')
       .update(transaction)
@@ -74,6 +78,7 @@ export const dbService = {
   },
 
   async deleteTransaction(id: number, userId: string) {
+    if (!supabase) return;
     const { error } = await supabase
       .from('transactions')
       .delete()
@@ -85,6 +90,7 @@ export const dbService = {
 
   // Categories
   async getCategories(userId: string) {
+    if (!supabase) return [];
     const { data, error } = await supabase
       .from('categories')
       .select('*')
@@ -96,6 +102,7 @@ export const dbService = {
   },
 
   async getCategory(id: number, userId: string) {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('categories')
       .select('*')
@@ -108,6 +115,7 @@ export const dbService = {
   },
 
   async createCategory(category: Omit<Category, 'id' | 'created_at'>) {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('categories')
       .insert(category)
@@ -119,6 +127,7 @@ export const dbService = {
   },
 
   async updateCategory(id: number, category: Partial<Category>) {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('categories')
       .update(category)
@@ -131,6 +140,7 @@ export const dbService = {
   },
 
   async deleteCategory(id: number, userId: string) {
+    if (!supabase) return;
     const { error } = await supabase
       .from('categories')
       .delete()
@@ -142,6 +152,7 @@ export const dbService = {
 
   // Budgets
   async getBudgets(userId: string, monthYear?: string) {
+    if (!supabase) return [];
     let query = supabase
       .from('budgets')
       .select(`
@@ -167,6 +178,7 @@ export const dbService = {
   },
 
   async createBudget(budget: Omit<Budget, 'id' | 'created_at'>) {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('budgets')
       .insert(budget)
@@ -178,6 +190,7 @@ export const dbService = {
   },
 
   async updateBudget(id: number, budget: Partial<Budget>) {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('budgets')
       .update(budget)
@@ -190,6 +203,7 @@ export const dbService = {
   },
 
   async deleteBudget(id: number, userId: string) {
+    if (!supabase) return;
     const { error } = await supabase
       .from('budgets')
       .delete()
@@ -201,6 +215,7 @@ export const dbService = {
 
   // Settings
   async getSettings(userId: string) {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('settings')
       .select('*')
@@ -218,6 +233,7 @@ export const dbService = {
   },
 
   async createSettings(settings: Omit<AppSettings, 'id' | 'created_at' | 'updated_at'>) {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('settings')
       .insert(settings)
@@ -229,6 +245,7 @@ export const dbService = {
   },
 
   async updateSettings(userId: string, settings: Partial<AppSettings>) {
+    if (!supabase) return null;
     const { data, error } = await supabase
       .from('settings')
       .update({ ...settings, updated_at: new Date().toISOString() })
@@ -242,6 +259,7 @@ export const dbService = {
 
   // Seed initial data
   async seedInitialData(userId: string) {
+    if (!supabase) return;
     const existingCategories = await this.getCategories(userId);
     
     if (existingCategories.length === 0) {
@@ -276,6 +294,7 @@ export const dbService = {
 
   // Real-time subscriptions
   subscribeToTransactions(userId: string, callback: (payload: any) => void) {
+    if (!supabase) return { unsubscribe: () => {} };
     return supabase
       .channel('transactions-channel')
       .on(
@@ -292,6 +311,7 @@ export const dbService = {
   },
 
   subscribeToCategories(userId: string, callback: (payload: any) => void) {
+    if (!supabase) return { unsubscribe: () => {} };
     return supabase
       .channel('categories-channel')
       .on(
@@ -308,6 +328,7 @@ export const dbService = {
   },
 
   subscribeToSettings(userId: string, callback: (payload: any) => void) {
+    if (!supabase) return { unsubscribe: () => {} };
     return supabase
       .channel('settings-channel')
       .on(
